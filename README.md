@@ -1,1 +1,1 @@
-# WebApp-JSF
+# WebApp-Java Server Faces
