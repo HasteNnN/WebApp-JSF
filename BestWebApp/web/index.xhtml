@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>TeoApp</title>
+    </h:head>
+    <h:body>
+        <h:form>  
+            <p:growl id="messages" showDetail="false"/>
+            <p:tabMenu>
+                <p:menuitem value="Home" action="index?faces-redirect=true" />
+                <p:menuitem value="Clienti" action="#{menuView.clienti}" />
+                <p:menuitem value="Produse" action="#{menuView.produse}"/>
+                <p:menuitem value="Producatori" action="#{menuView.producatori}"/>
+                <p:menuitem value="Logout" action="#{login.logout}"/>
+            </p:tabMenu>
+        </h:form>
+        
+        <h:form styleClass="d">
+            <p>Bine ai venit #{login.user}! In continuare te vei bucura de cea mai buna aplicatie
+            web pentru editat tabele sql.</p>
+            <p>Uite si un gif:</p>
+            <p><img src="home.gif" /></p>
+        </h:form>
+       
+    </h:body>
+</html>
+

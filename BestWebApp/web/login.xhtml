@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Login</title>
+</h:head>
+
+<h:body>
+	
+	<p:ajaxStatus style="display:block; text-align: center;">
+		<f:facet name="default">
+			<h:outputText value="Introduceti credentialele" />
+		</f:facet>
+		<f:facet name="start">
+			<h:outputText value="Please wait #{login.user}, Connecting database..." />
+		</f:facet>
+		<f:facet name="complete">
+			<h:outputText value="Please try again #{login.user}, Database/login error!!" />
+		</f:facet>
+	</p:ajaxStatus>
+	
+
+	<h:form id="loginForm">
+		<p:growl id="msg" showDetail="true" life="4000" />
+		<p:panel id="loginPnl" header="Login"
+			style="width: 350px; margin: 0 auto;">
+			<h:panelGrid id="loginPanel" columns="2" cellpadding="5">
+				<h:outputText value="Username" />
+				<p:inputText id="username" value="#{login.user}"></p:inputText>
+				<p:spacer /><p:spacer />	
+				<h:outputText value="Password" />
+				<p:password id="password" value="#{login.pwd}"
+					feedback="false"></p:password>
+				<p:message for="password"></p:message>
+			</h:panelGrid>
+			<h:panelGrid columns="1" cellpadding="10" width="100%">
+				<p:commandButton id="loginButton" action="#{login.validateUsernamePassword}"
+					value="Login" update="loginForm" ajax="true" style="float: right;">
+				</p:commandButton>
+			</h:panelGrid>
+		</p:panel>
+		<p:blockUI block="loginPnl" trigger="loginButton" >
+			<p:graphicImage value="resources/images/loader.gif" />
+		</p:blockUI>
+	</h:form>
+</h:body>
+</html>

@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Producatori</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+
+    <body>
+        <style type="text/css">
+            .ui-row-editor .ui-row-editor-pencil {
+                margin-left:8px;
+            }
+        </style>
+
+        <h:form>  
+            <p:growl id="messages" showDetail="false"/>
+            <p:tabMenu>
+                <p:menuitem value="Home" action="index?faces-redirect=true" />
+                <p:menuitem value="Clienti" action="#{menuView.clienti}" />
+                <p:menuitem value="Produse" action="#{menuView.produse}"/>
+                <p:menuitem value="Producatori" action="#{menuView.producatori}"/>
+                <p:menuitem value="Logout" action="#{login.logout}"/>
+            </p:tabMenu>
+        </h:form>
+
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:dataTable id="producatori" var="producator" value="#{editProducatori.producatori}" editable="true" style="margin-bottom:20px">
+                <f:facet name="header">
+                    Producatori
+                </f:facet>
+
+                <p:ajax event="rowEdit" listener="#{editProducatori.onRowEdit}" update=":form:msgs" />
+                <p:ajax event="rowEditCancel" listener="#{editProducatori.onRowCancel}" update=":form:msgs" />
+
+                <p:column headerText="ProducatorID">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{producator.id}" /></f:facet>
+                        <f:facet name="input"><p:inputText id="modelInput" value="#{producator.id}" readonly="true" style="width:100%"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Denumire">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{producator.denumire}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{producator.denumire}" style="width:100%"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="TaraOrigine">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{producator.tara}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{producator.tara}" style="width:100%"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Adresa">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{producator.adresa}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{producator.adresa}" style="width:100%"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column style="width:35px">
+                    <p:rowEditor />
+                </p:column>
+                
+                <p:column width="12" rendered="#{login.isadmin() eq 'true'}">
+                    <p:commandLink ajax="true" action="#{editProducatori.deleteProducator(producator)}">
+                        <span title="Delete" class="ui-icon ui-icon-trash"/>
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
+
+
+            <h:panelGrid id="inputForm" columns="2" cellpadding="5">
+          
+                <p:outputLabel for="denumire" value="Denumire: " />
+                <p:inputText id="denumire" value="#{editProducatori.denumireNoua}" />
+
+                <p:outputLabel for="tara"  value="Tara origine: " />
+                <p:inputText id="tara" value="#{editProducatori.taraNoua}" />
+                
+                <p:outputLabel for="adresa"  value="Adresa: " />
+                <p:inputText id="adresa" value="#{editProducatori.adresaNoua}" />
+
+                <p:commandButton value="Resetare" type="reset" />
+                <p:commandButton id="submitButton" update="inputForm" ajax="true"
+                                 value="Adaugare producator" action="#{editProducatori.addProducator()}" oncomplete="producatori.xhtml?faces-redirect=true"/>
+               
+            </h:panelGrid>
+        </h:form>
+    </body>
+</html>

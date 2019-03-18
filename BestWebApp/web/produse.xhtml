@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Produse</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+
+    <body>
+        <style type="text/css">
+            .ui-row-editor .ui-row-editor-pencil {
+                margin-left:8px;
+            }
+        </style>
+
+        <h:form>  
+            <p:growl id="messages" showDetail="false"/>
+            <p:tabMenu>
+                <p:menuitem value="Home" action="index?faces-redirect=true" />
+                <p:menuitem value="Clienti" action="#{menuView.clienti}" />
+                <p:menuitem value="Produse" action="#{menuView.produse}"/>
+                <p:menuitem value="Producatori" action="#{menuView.producatori}"/>
+                <p:menuitem value="Logout" action="#{login.logout}"/>
+            </p:tabMenu>
+        </h:form>
+
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:dataTable id="produse" var="produs" value="#{editProduse.produse}" editable="true" style="margin-bottom:20px">
+                <f:facet name="header">
+                    Produse
+                </f:facet>
+
+                <p:ajax event="rowEdit" listener="#{editProduse.onRowEdit}" update=":form:msgs" />
+                <p:ajax event="rowEditCancel" listener="#{editProduse.onRowCancel}" update=":form:msgs" />
+
+                <p:column headerText="ProdusID">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{produs.id}" /></f:facet>
+                        <f:facet name="input"><p:inputText id="modelInput" value="#{produs.id}" readonly="true" style="width:100%"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Denumire">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{produs.denumire}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{produs.denumire}" style="width:100%"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="DataProducere">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{produs.dataProducere}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{produs.dataProducere}" style="width:100%"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="DataExpirare">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{produs.dataExpirare}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{produs.dataExpirare}" style="width:100%"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column style="width:35px">
+                    <p:rowEditor />
+                </p:column>
+                
+                <p:column width="12" rendered="#{login.isadmin() eq 'true'}">
+                    <p:commandLink ajax="true" action="#{editProduse.deleteProdus(produs)}">
+                        <span title="Delete" class="ui-icon ui-icon-trash"/>
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
+
+
+            <h:panelGrid id="inputForm" columns="2" cellpadding="5">
+          
+                <p:outputLabel for="denumire" value="Denumire: " />
+                <p:inputText id="denumire" value="#{editProduse.denumireNoua}" />
+
+                <p:outputLabel for="dataProd"  value="DataProducere " />
+                <p:inputText id="dataProd" value="#{editProduse.dataProdNoua}" />
+                
+                <p:outputLabel for="dataExp"  value="DataExpirare " />
+                <p:inputText id="dataExp" value="#{editProduse.dataExpNoua}" />
+
+                <p:commandButton value="Resetare" type="reset" />
+                <p:commandButton id="submitButton" update="inputForm" ajax="true"
+                                 value="Adaugare produs" action="#{editProduse.addProdus()}" oncomplete="produse.xhtml?faces-redirect=true"/>
+               
+            </h:panelGrid>
+        </h:form>
+    </body>
+</html>

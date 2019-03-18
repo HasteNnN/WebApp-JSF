@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Clienti</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+
+    <body>
+        <style type="text/css">
+            .ui-row-editor .ui-row-editor-pencil {
+                margin-left:8px;
+            }
+        </style>
+
+        <h:form>  
+            <p:growl id="messages" showDetail="false"/>
+            <p:tabMenu>
+                <p:menuitem value="Home" action="index?faces-redirect=true" />
+                <p:menuitem value="Clienti" action="#{menuView.clienti}" />
+                <p:menuitem value="Produse" action="#{menuView.produse}"/>
+                <p:menuitem value="Producatori" action="#{menuView.producatori}"/>
+                <p:menuitem value="Logout" action="#{login.logout}"/>
+            </p:tabMenu>
+        </h:form>
+
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:dataTable id="clienti" var="client" value="#{editClienti.clienti}" editable="true" style="margin-bottom:20px">
+                <f:facet name="header">
+                    Clienti
+                </f:facet>
+
+                <p:ajax event="rowEdit" listener="#{editClienti.onRowEdit}" update=":form:msgs" />
+                <p:ajax event="rowEditCancel" listener="#{editClienti.onRowCancel}" update=":form:msgs" />
+
+<!--                <p:column style="width:32px;text-align: center">
+                    <p:commandButton update=":form:produseDet" oncomplete="PF('produseOP').show('#{component.clientId}')"
+                                     icon="pi pi-search" title="Vizualizare produse">
+                        <f:setPropertyActionListener value="#{client}" target="#{editClienti.selectedClient}" /> mki9
+                    </p:commandButton>
+                </p:column>-->
+
+                <p:column headerText="ClientId">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{client.id}" /></f:facet>
+                        <f:facet name="input"><p:inputText id="modelInput" value="#{client.id}" readonly="true" style="width:100%"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Nume">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{client.nume}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{client.nume}" style="width:100%"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Prenume">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{client.prenume}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{client.prenume}" style="width:100%"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Adresa">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{client.adresa}" /></f:facet>
+                        <f:facet name="input"><p:inputText value="#{client.adresa}" style="width:100%"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column style="width:35px">
+                    <p:rowEditor />
+                </p:column>
+
+                <p:column width="12" rendered="#{login.isadmin() eq 'true'}">
+                    <p:commandLink ajax="true" action="#{editClienti.deleteClient(client)}">
+                        <span title="Delete" class="ui-icon ui-icon-trash"/>
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
+            
+<!--            <p:overlayPanel widgetVar="produseOP" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
+                <p:outputPanel id="produseDet" style="text-align:center;">
+                    <p:dataList value="#{editClienti.getProduse()}" var="produs"
+                                type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated">
+                        <f:facet name="header">
+                            Produse
+                        </f:facet>
+                        <h:outputText value="#{produs.denumire}, #{produs.dataProducere}, #{produs.dataExpirare}"
+                                      style="display:inline-block"/>
+                    </p:dataList>
+                </p:outputPanel>
+            </p:overlayPanel>-->
+
+            <h:panelGrid id="inputForm" columns="2" cellpadding="5">
+
+                <p:outputLabel for="nume" value="Nume: " />
+                <p:inputText id="nume" value="#{editClienti.numeNou}" />
+
+                <p:outputLabel for="prenume"  value="Prenume: " />
+                <p:inputText id="prenume" value="#{editClienti.prenumeNou}" />
+
+                <p:outputLabel for="adresa"  value="Adresa: " />
+                <p:inputText id="adresa" value="#{editClienti.adresaNoua}" />
+
+                <p:commandButton value="Resetare" type="reset" />
+                <p:commandButton id="submitButton" update="inputForm" ajax="true"
+                                 value="Adaugare client" action="#{editClienti.addclient}" oncomplete="clienti.xhtml?faces-redirect=true"/>
+
+            </h:panelGrid>
+
+        </h:form>
+    </body>
+</html>
